@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Carousel, Card } from 'react-bootstrap';
-import Image from './assets/placeholder.jpeg';
+import { Carousel } from 'react-bootstrap';
 import "./BestBooks.css";
 
 
@@ -32,39 +31,28 @@ class BestBooks extends React.Component {
   }
   render() {
     /* TODO: render user's books in a Carousel */
-    return (
-      let bookCarousel = this.state.books.map((book) => (
-      )};
-      <>
-      <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
-      {this.state.books.length > 0 ? (
-    <Carousel>
+
+    let bookCarousel = this.state.books.map(book => (
       <Carousel.Item key={book._id}>
-        <Carousel.Caption id="bro">
-          <h2>{book.title}</h2>
-        </Carousel.Caption>
-          <img className='worry'
-            src={Image}
-            alt='There should be an img'
-            width={200}
-            height={200}
-          />
-          <Carousel.Caption>
-            <p id="dude">{book.description}</p>
-          </Carousel.Caption>
+        <h3>{book.title}</h3>
+        <p>{book.description}</p>
       </Carousel.Item>
-    </Carousel>
-  
-        <Card>
-          <Carousel>
-            {bookCarousel}
-          </Carousel>
-        </Card>
+    ))
+
+    return (
+      <>
+      <h1>My Essential Lifelong Learning &amp; Formation Shelf</h1>
+      {this.state.book.length ? (
+        <Carousel>
+          {bookCarousel}
+        </Carousel>
       ) : (
-      <h3>No Books Found</h3>
+        <h1>No Books Found</h1>
       )}
-    </>
-    )
-  }
-}
+      </>
+    );
+
+  };
+};
+
 export default BestBooks;
