@@ -9,6 +9,8 @@ import {
   Route
 } from "react-router-dom";
 import Login from './Login';
+import Profile from './Profile';
+// import LogoutButton from './LogoutButton';
 
 //let server = process.env.REACT_APP_SERVER;
 
@@ -28,7 +30,7 @@ class App extends React.Component {
     this.setState({
       username: username
     })
-    console.log(this.state.username);
+    //console.log(this.state.username);
   }
 
   emailHandler = (email) => {
@@ -36,7 +38,7 @@ class App extends React.Component {
     this.setState({
       email: email
     })
-    console.log(this.state.email);
+    //console.log(this.state.email);
   }
 
   logoutHandler = () => {
@@ -49,7 +51,10 @@ class App extends React.Component {
     return (
       <>
         <Router>
-          <Header user={this.state.user} onLogout={this.logoutHandler} />
+          <Header 
+            user={this.state.user} 
+            onLogout={this.logoutHandler}
+          /> 
           <Switch>
             <Route exact path="/">
               {/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */}
@@ -64,6 +69,9 @@ class App extends React.Component {
               }
             </Route>
             {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
+            <Route exact path="/profile">
+             <Profile username={this.state.user} email={this.state.email}/>
+            </Route>
           </Switch>
           <Footer />
         </Router>
