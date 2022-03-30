@@ -43,9 +43,11 @@ class BestBooks extends React.Component {
       <>
       <h1>My Essential Lifelong Learning &amp; Formation Shelf</h1>
       {this.state.books.length ? (
+        <div className='carousel' hight={500}>
         <Carousel>
           {bookCarousel}
         </Carousel>
+        </div>
       ) : (
         <h1>No Books Found</h1>
       )}
