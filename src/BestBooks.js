@@ -4,7 +4,8 @@ import Carousel from 'react-bootstrap/Carousel'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import BookFormModal from './BookFormModal';
-import BookDeleteModal from './BookDeleteModal'
+import BookDeleteModal from './BookDeleteModal';
+import BookUpdateModal from './BookUpdateModal';
 import "./BestBooks.css";
 
 
@@ -74,6 +75,16 @@ class BestBooks extends React.Component {
       console.log(error.response)
     }
   }
+  bookUpdate = async (book) => {
+    try {
+      let updateBookModal = await axios.post(`${SERVER}/books`, book);
+      this.setState({
+        books: [...this.state.books,updateBookModal.data]
+      })
+    } catch (error) {
+      console.log('we were unable to update your book', error.response)
+    }
+  }
 
   componentDidMount() {
     this.getBooks();
@@ -96,6 +107,11 @@ class BestBooks extends React.Component {
           >
             Remove {book.title} from Your Collection
           </Button>
+          <Modal
+          onClick={()=>this.updateBookModal}
+          >
+            Update {book.title}'s Info
+          </Modal>
       </Carousel.Item>
     ))
 
@@ -121,11 +137,12 @@ class BestBooks extends React.Component {
           >
             Add Book To Your Collection
           </Button>
-          <Button
+          {/* <Button
           onClick={this.modalDeleteBooks}
           >
             Remove A Book From Your Collection
           </Button>
+           */}
         </>
       )}
 
@@ -146,14 +163,21 @@ class BestBooks extends React.Component {
       show={this.state.modalDeleteBooks}
       onHide={this.state.onHide}
       >
-        <Modal.Header>
+        {/* <Modal.Header>
           <Modal.Title>Remove A Book From Your Collection</Modal.Title>
-        </Modal.Header>
-
+        </Modal.Header> */}
+        <div>
         <BookDeleteModal
         deleteBooks={this.deleteBooks}
         onHide={this.onHide}
         />
+        </div>
+        <div>
+        <BookUpdateModal 
+        updateBook={this.updateBook}
+        onHide={this.onHide}
+        />
+        </div>
       </Modal>
       </>
       );
