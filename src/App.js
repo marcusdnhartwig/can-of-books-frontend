@@ -8,6 +8,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import Login from './Login';
 
 //let server = process.env.REACT_APP_SERVER;
 
@@ -17,13 +18,25 @@ class App extends React.Component {
     super(props);
     this.state = {
       user: null,
+      username: '',
+      email: ''
     }
   }
 
-  loginHandler = (user) => {
+  usernameHandler = (username) => {
+    console.log(username);
     this.setState({
-      user,
+      username: username
     })
+    console.log(this.state.username);
+  }
+
+  emailHandler = (email) => {
+    console.log(email);
+    this.setState({
+      email: email
+    })
+    console.log(this.state.email);
   }
 
   logoutHandler = () => {
@@ -39,7 +52,16 @@ class App extends React.Component {
           <Header user={this.state.user} onLogout={this.logoutHandler} />
           <Switch>
             <Route exact path="/">
-              {/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */}<BestBooks/>
+              {/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */}
+              {this.state.username
+              ?
+              <BestBooks/>
+              :
+              <Login
+              usernameHandler={this.usernameHandler}
+              emailHandler={this.emailHandler}
+              />
+              }
             </Route>
             {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
           </Switch>

@@ -6,28 +6,30 @@ class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: '',
-      userEmail: ''
+      user: '',
+      email: ''
     }
   };
 
   render() {
 
-    /* TODO: create a simple login form that collects username and and email, and lets parent component know when form has been submitted */
-
-    let handleFormInput = (e) => {
-      let inputName = e.target.name;
-      let inputValue = e.target.value;
-      this.setState({[inputName]:inputValue});
-    }
-
-    let handleSubmit = (e) => {
+    const usernameF = (e) => {
       e.preventDefault();
-      let userNameInput = this.state.userName
-      let emailInput = this.state.userEmail
-      this.props.handleLogin(userNameInput, emailInput);
+      this.setState({user:e.target.value});
     }
 
+    const emailF = (e) => {
+      e.preventDefault();
+      this.setState({email:e.target.value});
+    }
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      this.props.usernameHandler(this.state.user);
+      this.props.emailHandler(this.state.email);
+    }
+
+    /* TODO: create a simple login form that collects username and and email, and lets parent component know when form has been submitted */
     return (
 
       <Form>
@@ -37,7 +39,7 @@ class LoginForm extends Component {
           placeholder="Name of User, i.e. John Smith"
           name="userName"
           type="text"
-          onChange={handleFormInput}
+          onChange={usernameF}
           />
         </Form.Group>
         <Form.Group>
@@ -46,7 +48,7 @@ class LoginForm extends Component {
           placeholder="Email of User, i.e. john.smith@website.com"
           name="emailInput"
           type="email"
-          onChange={handleFormInput}
+          onChange={emailF}
           />
         </Form.Group>
         <Button
