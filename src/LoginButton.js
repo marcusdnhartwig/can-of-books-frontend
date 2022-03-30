@@ -39,7 +39,7 @@ export default class LoginButton extends Component {
             <Modal.Title>Sign Up / Log in</Modal.Title>
           </Modal.Header>
           <LoginForm
-          usernameHandler={this.props.usernameHandler}
+          userHandler={this.props.userHandler}
           emailHandler={this.props.emailHandler}
           />
         </Modal>

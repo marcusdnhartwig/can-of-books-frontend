@@ -14,7 +14,7 @@ class Login extends React.Component {
           </Card.Text>
           {/* TODO: add a `LoginButton` component here that will log the user in */}
           <LoginButton
-          usernameHandler={this.props.usernameHandler}
+          userHandler={this.props.userHandler}
           emailHandler={this.props.emailHandler}
           />
         </Card.Body>
