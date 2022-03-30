@@ -68,7 +68,7 @@ class App extends React.Component {
               }
             </Route>
             {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
-            <Route exact path="/profile">
+            <Route exact path="/Profile">
              <Profile user={this.state.user} email={this.state.email}/>
             </Route>
           </Switch>
