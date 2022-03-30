@@ -75,6 +75,16 @@ Lab 11
 Name of feature: __lab11__
 Estimate of time needed to complete: ___7hrs__
 Start time: ___2ish__
+Finish time: ___9__
+Actual time needed to complete: ___7__
+ 
+//////////////////////////////////////////////////////////////
+
+Lab 11
+ 
+Name of feature: __lab12__
+Estimate of time needed to complete: ___7hrs__
+Start time: ___2ish__
 Finish time: ___?__
 Actual time needed to complete: ___?__
  

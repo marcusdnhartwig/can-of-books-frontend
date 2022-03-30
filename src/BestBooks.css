@@ -4,3 +4,12 @@
 #dude {
   color: black;
 }
+
+h1 {
+  text-align: center;
+  padding-top: 50px;
+}
+
+.bookCarousel {
+  align-items: center;
+}
