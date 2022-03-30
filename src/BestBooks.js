@@ -4,6 +4,7 @@ import Carousel from 'react-bootstrap/Carousel'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import BookFormModal from './BookFormModal';
+import BookDeleteModal from './BookDeleteModal'
 import "./BestBooks.css";
 
 
@@ -15,6 +16,7 @@ class BestBooks extends React.Component {
     this.state = {
       books: [],
       modalAddBooks: false,
+      modalDeleteBooks: false
     }
   }
 
@@ -24,9 +26,16 @@ class BestBooks extends React.Component {
     })
   };
 
+  deleteFormModalShow=() => {
+    this.setState({
+      modalDeleteBooks:true
+    })
+  }
+
   onHide=() => {
     this.setState({
-      modalAddBooks:false
+      modalAddBooks:false,
+      modalDeleteBooks:false
     })
   }
 
@@ -53,7 +62,18 @@ class BestBooks extends React.Component {
   }
   }
 
-  
+  modalDeleteBooks = async (id) => {
+    console.log(id);
+    try {
+      await axios.delete(`${SERVER}/books/${id}`);
+      let trimmedCollection = this.state.books.filter(book => book._id !== id);
+      this.setState ({
+        books: trimmedCollection,
+      })
+    } catch(error){
+      console.log(error.response)
+    }
+  }
 
   componentDidMount() {
     this.getBooks();
@@ -67,8 +87,15 @@ class BestBooks extends React.Component {
 
     let bookCarousel = this.state.books.map(book => (
       <Carousel.Item key={book._id}>
+        <p>{book._id}</p>
         <h3>{book.title}</h3>
         <p>{book.description}</p>
+       
+          <Button
+          onClick={()=>this.modalDeleteBooks(book._id)}
+          >
+            Remove {book.title} from Your Collection
+          </Button>
       </Carousel.Item>
     ))
 
@@ -80,10 +107,10 @@ class BestBooks extends React.Component {
           <Carousel>
             {bookCarousel}
           </Carousel>
-          <Button
+           <Button
           onClick={this.modalFormShow}
           >
-            Add Book To Your Collection
+            Add A Book to Your Collection
           </Button>
         </div>
       ) : (
@@ -93,6 +120,11 @@ class BestBooks extends React.Component {
           onClick={this.modalFormShow}
           >
             Add Book To Your Collection
+          </Button>
+          <Button
+          onClick={this.modalDeleteBooks}
+          >
+            Remove A Book From Your Collection
           </Button>
         </>
       )}
@@ -107,6 +139,19 @@ class BestBooks extends React.Component {
 
         <BookFormModal
         postBooks={this.postBooks}
+        onHide={this.onHide}
+        />
+      </Modal>
+      <Modal
+      show={this.state.modalDeleteBooks}
+      onHide={this.state.onHide}
+      >
+        <Modal.Header>
+          <Modal.Title>Remove A Book From Your Collection</Modal.Title>
+        </Modal.Header>
+
+        <BookDeleteModal
+        deleteBooks={this.deleteBooks}
         onHide={this.onHide}
         />
       </Modal>
