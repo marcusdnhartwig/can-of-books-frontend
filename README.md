@@ -80,13 +80,23 @@ Actual time needed to complete: ___7__
  
 //////////////////////////////////////////////////////////////
 
-Lab 11
+Lab 12
  
 Name of feature: __lab12__
 Estimate of time needed to complete: ___7hrs__
 Start time: ___2ish__
-Finish time: ___?__
-Actual time needed to complete: ___?__
+Finish time: ___10__
+Actual time needed to complete: ___8__
+ 
+//////////////////////////////////////////////////////////////
+
+Lab 13
+ 
+Name of feature: __lab13__
+Estimate of time needed to complete: ___7hrs__
+Start time: ___2ish__
+Finish time: ___10__
+Actual time needed to complete: ___8__
  
 //////////////////////////////////////////////////////////////
 
