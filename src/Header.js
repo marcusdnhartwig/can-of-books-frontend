@@ -5,6 +5,7 @@ import './Header.css';
 import LogoutButton from './LogoutButton';
 
 class Header extends React.Component {
+
   render() {
     console.log(this.props);
     return (
@@ -19,7 +20,7 @@ class Header extends React.Component {
         </NavItem>
         {/* TODO: if the user is logged in, render the `LogoutButton` */}
      
-          <LogoutButton onlogout={this.props.onlogout}/>
+          <LogoutButton onLogout={this.props.onLogout}/>
           </>
           )}
         
