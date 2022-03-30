@@ -8,13 +8,13 @@ export default class LoginButton extends Component {
   constructor(props) {
     super(props)
     this.state={
-      showModal:false
+      showModal:false,
     };
   };
 
   modalHandler=() => {
     this.setState({
-      showModal:true
+      showModal: !this.state.showModal,
     });
   };
 
@@ -33,12 +33,14 @@ export default class LoginButton extends Component {
 
         <Modal
         show={this.state.showModal}
+        onHide={this.modalHandler}
         >
-          <Modal.Header closebutton>
+          <Modal.Header /*closebutton={this.modalHandler}*/>
             <Modal.Title>Sign Up / Log in</Modal.Title>
           </Modal.Header>
           <LoginForm
-          handleLogin={this.props.handleLogin}
+          usernameHandler={this.props.usernameHandler}
+          emailHandler={this.props.emailHandler}
           />
         </Modal>
       </>
