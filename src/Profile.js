@@ -11,7 +11,7 @@ class Profile extends Component {
       <>
       <p>Profile page </p>
       <div>
-        <p>Your Username: {this.props.username}</p>
+        <p>Your Username: {this.props.user}</p>
       </div> 
       <div>
         <p>Your Email: {this.props.email}</p>
