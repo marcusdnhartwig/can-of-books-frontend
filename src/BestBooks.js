@@ -17,7 +17,8 @@ class BestBooks extends React.Component {
     this.state = {
       books: [],
       modalAddBooks: false,
-      modalDeleteBooks: false
+      modalDeleteBooks: false,
+      modalUpdateBooks: false
     }
   }
 
@@ -33,10 +34,17 @@ class BestBooks extends React.Component {
     })
   }
 
+  updateFormModalShow=() => {
+    this.setState({
+      modalUpdateBooks: true
+    })
+  }
+
   onHide=() => {
     this.setState({
       modalAddBooks:false,
-      modalDeleteBooks:false
+      modalDeleteBooks:false,
+      modalUpdateBooks:false
     })
   }
 
@@ -75,6 +83,7 @@ class BestBooks extends React.Component {
       console.log(error.response)
     }
   }
+
   bookUpdate = async (book) => {
     try {
       let updateBookModal = await axios.post(`${SERVER}/books`, book);
@@ -108,7 +117,7 @@ class BestBooks extends React.Component {
             Remove {book.title} from Your Collection
           </Button>
           <Modal
-          onClick={()=>this.updateBookModal}
+          onClick={this.state.modalUpdateBooks}
           >
             Update {book.title}'s Info
           </Modal>
@@ -123,19 +132,33 @@ class BestBooks extends React.Component {
           <Carousel>
             {bookCarousel}
           </Carousel>
+
            <Button
           onClick={this.modalFormShow}
           >
             Add A Book to Your Collection
           </Button>
+          
+          <Button
+          onClick={this.updateFormModalShow}
+          >
+            Update Book in Your Collection
+          </Button>
         </div>
       ) : (
         <>
           <h1>No Books Found</h1>
+
           <Button
           onClick={this.modalFormShow}
           >
             Add Book To Your Collection
+          </Button>
+
+          <Button
+          onClick={this.updateFormModalShow}
+          >
+            Update Book in Your Collection
           </Button>
           {/* <Button
           onClick={this.modalDeleteBooks}
@@ -159,22 +182,19 @@ class BestBooks extends React.Component {
         onHide={this.onHide}
         />
       </Modal>
+
+
       <Modal
-      show={this.state.modalDeleteBooks}
+      show={this.state.modalUpdateBooks}
       onHide={this.state.onHide}
       >
         {/* <Modal.Header>
           <Modal.Title>Remove A Book From Your Collection</Modal.Title>
         </Modal.Header> */}
-        <div>
-        <BookDeleteModal
-        deleteBooks={this.deleteBooks}
-        onHide={this.onHide}
-        />
-        </div>
+
         <div>
         <BookUpdateModal 
-        updateBook={this.updateBook}
+        bookUpdate={this.bookUpdate}
         onHide={this.onHide}
         />
         </div>

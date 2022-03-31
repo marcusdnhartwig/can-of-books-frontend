@@ -45,7 +45,7 @@ class BookUpdateModal extends React.Component {
           >
             <Form.Check
             type="checkbox"
-            label="I am updating this book"
+            label="I finished reading this"
             />
           </Form.Group>
           <Form.Group
