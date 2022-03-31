@@ -4,7 +4,7 @@ import Carousel from 'react-bootstrap/Carousel'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import BookFormModal from './BookFormModal';
-import BookDeleteModal from './BookDeleteModal';
+//import BookDeleteModal from './BookDeleteModal';
 import BookUpdateModal from './BookUpdateModal';
 import "./BestBooks.css";
 
@@ -22,29 +22,29 @@ class BestBooks extends React.Component {
     }
   }
 
-  modalFormShow=() => {
+  modalFormShow = () => {
     this.setState({
-      modalAddBooks:true
+      modalAddBooks: true
     })
   };
 
-  deleteFormModalShow=() => {
+  deleteFormModalShow = () => {
     this.setState({
-      modalDeleteBooks:true
+      modalDeleteBooks: true
     })
   }
 
-  updateFormModalShow=() => {
+  updateFormModalShow = () => {
     this.setState({
       modalUpdateBooks: true
     })
   }
 
-  onHide=() => {
+  onHide = () => {
     this.setState({
-      modalAddBooks:false,
-      modalDeleteBooks:false,
-      modalUpdateBooks:false
+      modalAddBooks: false,
+      modalDeleteBooks: false,
+      modalUpdateBooks: false
     })
   }
 
@@ -54,7 +54,7 @@ class BestBooks extends React.Component {
       this.setState({
         books: results.data
       })
-      console.log(this.state.books);
+      // console.log(this.state.books);
     } catch (error) {
       console.log('we have an error:', error.response)
     }
@@ -62,13 +62,13 @@ class BestBooks extends React.Component {
 
   postBooks = async (book) => {
     try {
-      let bookAdd = await axios.post(`${SERVER}/books`,book);
+      let bookAdd = await axios.post(`${SERVER}/books`, book);
       this.setState({
-        books: [...this.state.books,bookAdd.data]
+        books: [...this.state.books, bookAdd.data]
       })
-  } catch (error) {
-    console.log('we have an error:', error.response)
-  }
+    } catch (error) {
+      console.log('we have an error:', error.response)
+    }
   }
 
   modalDeleteBooks = async (id) => {
@@ -76,20 +76,23 @@ class BestBooks extends React.Component {
     try {
       await axios.delete(`${SERVER}/books/${id}`);
       let trimmedCollection = this.state.books.filter(book => book._id !== id);
-      this.setState ({
+      this.setState({
         books: trimmedCollection,
       })
-    } catch(error){
+    } catch (error) {
       console.log(error.response)
     }
   }
 
-  bookUpdate = async (book) => {
+  bookUpdate = async (updatedBook, id) => {
+    // let bookID = books._id
     try {
-      let updateBookModal = await axios.post(`${SERVER}/books`, book);
-      this.setState({
-        books: [...this.state.books,updateBookModal.data]
-      })
+      let url = `${SERVER}/books/${updatedBook.id}`
+      let backendBook= await axios.post(url, updatedBook);
+      let backendBookData = this.state.books.map(exitingBook => {
+        return exitingBook._id === updatedBook._id ? backendBook.data : exitingBook;
+      });
+      this.setState({ books: backendBookData });
     } catch (error) {
       console.log('we were unable to update your book', error.response)
     }
@@ -100,110 +103,118 @@ class BestBooks extends React.Component {
   };
 
   // when the site loads (has all it needs), the data will be displayed
-
-
+  setBook = (obj) => {
+    this.setState({
+      book: obj
+    })
+  };
+  
   render() {
     /* TODO: render user's books in a Carousel */
-
+    // setState of book to book from .map method, pass state to bookUpdateModal
     let bookCarousel = this.state.books.map(book => (
       <Carousel.Item key={book._id}>
-        <p>{book._id}</p>
-        <h3>{book.title}</h3>
-        <p>{book.description}</p>
-       
-          <Button
-          onClick={()=>this.modalDeleteBooks(book._id)}
-          >
-            Remove {book.title} from Your Collection
-          </Button>
-          <Modal
-          onClick={this.state.modalUpdateBooks}
-          >
-            Update {book.title}'s Info
-          </Modal>
+        <h3>Title: {book.title}</h3>
+        <p>Description: {book.description}</p>
+        {this.setBook(book)},
+
+        <Button
+          onClick={() => this.modalDeleteBooks(book._id)}
+        >
+          Remove {book.title} from Your Collection
+        </Button>
+        <Button
+          onClick={this.updateFormModalShow}
+          book= {book}
+        >
+          
+          Update {book.title}'s Info
+        </Button>
       </Carousel.Item>
     ))
 
     return (
       <>
-      <h1>My Essential Lifelong Learning &amp; Formation Shelf</h1>
-      {this.state.books.length ? (
-        <div className='bookCarousel'>
-          <Carousel>
-            {bookCarousel}
-          </Carousel>
+        <h1>My Essential Lifelong Learning &amp; Formation Shelf</h1>
+        <main>
+          {this.state.books.length ? (
+            <div className='bookCarousel'>
+              <Carousel>
+                {bookCarousel}
+              </Carousel>
 
-           <Button
-          onClick={this.modalFormShow}
-          >
-            Add A Book to Your Collection
-          </Button>
-          
-          <Button
+              <Button
+                onClick={this.modalFormShow}
+              >
+                Add A Book to Your Collection
+              </Button>
+              {/* <Button
           onClick={this.updateFormModalShow}
           >
             Update Book in Your Collection
-          </Button>
-        </div>
-      ) : (
-        <>
-          <h1>No Books Found</h1>
+          </Button> */}
 
-          <Button
-          onClick={this.modalFormShow}
-          >
-            Add Book To Your Collection
-          </Button>
+            </div>
+          ) : (
+            <>
+              <h1>No Books Found</h1>
+              <Button
+                onClick={this.modalFormShow}
+              >
+                Add Book To Your Collection
+              </Button>
 
-          <Button
+              {/* <Button
           onClick={this.updateFormModalShow}
           >
             Update Book in Your Collection
-          </Button>
-          {/* <Button
+          </Button> */}
+              {/* <Button
           onClick={this.modalDeleteBooks}
           >
             Remove A Book From Your Collection
           </Button>
            */}
-        </>
-      )}
+            </>
+          )}
 
-      <Modal
-      show={this.state.modalAddBooks}
-      onHide={this.state.onHide}
-      >
-        <Modal.Header>
-          <Modal.Title>Enter Book Details</Modal.Title>
-        </Modal.Header>
+          <Modal
+            show={this.state.modalAddBooks}
+            onHide={this.onHide}
+          >
+            <Modal.Header>
+              <Modal.Title>Enter Book Details</Modal.Title>
+            </Modal.Header>
 
-        <BookFormModal
-        postBooks={this.postBooks}
-        onHide={this.onHide}
-        />
-      </Modal>
+            <BookFormModal
+              postBooks={this.postBooks}
+              onHide={this.onHide}
+            />
+          </Modal>
 
 
-      <Modal
-      show={this.state.modalUpdateBooks}
-      onHide={this.state.onHide}
-      >
-        {/* <Modal.Header>
-          <Modal.Title>Remove A Book From Your Collection</Modal.Title>
-        </Modal.Header> */}
+          <Modal
+            show={this.state.modalUpdateBooks}
+            onHide={this.onHide}
+          >
+            <Modal.Header>
+              <Modal.Title>Remove A Book From Your Collection</Modal.Title>
+            </Modal.Header>
 
-        <div>
-        <BookUpdateModal 
-        bookUpdate={this.bookUpdate}
-        onHide={this.onHide}
-        />
-        </div>
-      </Modal>
+            <div>
+              <BookUpdateModal
+                bookUpdate={this.bookUpdate}
+                onHide={this.onHide}
+                // book={book}
+              />
+            </div>
+          </Modal>
+        </main>
       </>
-      );
+    );
 
-    };
   };
+};
 
 
 

@@ -6,14 +6,18 @@ import Button from 'react-bootstrap/Button';
 class BookUpdateModal extends React.Component {
 
   updateBookFunction = (event) => {
-    event.preventDefault();
-    let userBook={
-      title: event.target.title.value,
-      description: event.target.description.value,
-      status: event.target.status.checked,
-      email: event.target.email.value
-    }
-    this.props.postBooks(userBook);
+    event.preventDefault(); // sweet.
+    //console.log(event.target);
+    console.log(this.props);
+    let updatedBook={
+      title: event.target.title.value || this.props.book.title,
+      description: event.target.description.value || this.props.book.description,
+      status: event.target.status.checked || this.props.status.checked,
+      email: event.target.email.value || this.props.email.value,
+      // id: this.props.book.id
+    } 
+    //console.log(updatedBook);
+    this.props.bookUpdate(updatedBook);
     this.props.onHide();
 
   }
