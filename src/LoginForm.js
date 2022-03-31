@@ -13,7 +13,7 @@ class LoginForm extends Component {
 
   render() {
 
-    const usernameF = (e) => {
+    const userF = (e) => {
       e.preventDefault();
       this.setState({user:e.target.value});
     }
@@ -25,7 +25,7 @@ class LoginForm extends Component {
 
     const handleSubmit = (e) => {
       e.preventDefault();
-      this.props.usernameHandler(this.state.user);
+      this.props.userHandler(this.state.user);
       this.props.emailHandler(this.state.email);
     }
 
@@ -37,9 +37,9 @@ class LoginForm extends Component {
           <Form.Label>Name:</Form.Label>
           <Form.Control
           placeholder="Name of User, i.e. John Smith"
-          name="userName"
+          name="user"
           type="text"
-          onChange={usernameF}
+          onChange={userF}
           />
         </Form.Group>
         <Form.Group>

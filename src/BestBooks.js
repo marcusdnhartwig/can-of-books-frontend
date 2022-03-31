@@ -1,6 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { Carousel } from 'react-bootstrap';
+import Carousel from 'react-bootstrap/Carousel'
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import BookFormModal from './BookFormModal';
+import BookDeleteModal from './BookDeleteModal';
+import BookUpdateModal from './BookUpdateModal';
 import "./BestBooks.css";
 
 
@@ -10,13 +15,34 @@ class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: []
+      books: [],
+      modalAddBooks: false,
+      modalDeleteBooks: false
     }
   }
-  /* TODO: Make a GET request to your API to fetch books for the logged in user  */
+
+  modalFormShow=() => {
+    this.setState({
+      modalAddBooks:true
+    })
+  };
+
+  deleteFormModalShow=() => {
+    this.setState({
+      modalDeleteBooks:true
+    })
+  }
+
+  onHide=() => {
+    this.setState({
+      modalAddBooks:false,
+      modalDeleteBooks:false
+    })
+  }
+
   getBooks = async () => {
     try {
-      let results = await axios.get(`${SERVER}/books`);
+      let results = await axios.get(`${SERVER}/books?email=${this.props.email}`);
       this.setState({
         books: results.data
       })
@@ -25,18 +51,67 @@ class BestBooks extends React.Component {
       console.log('we have an error:', error.response)
     }
   }
-  // when the site loads (has all it needs), the data will be displayed
+
+  postBooks = async (book) => {
+    try {
+      let bookAdd = await axios.post(`${SERVER}/books`,book);
+      this.setState({
+        books: [...this.state.books,bookAdd.data]
+      })
+  } catch (error) {
+    console.log('we have an error:', error.response)
+  }
+  }
+
+  modalDeleteBooks = async (id) => {
+    console.log(id, 'REMOVED FROM COLLECTION');
+    try {
+      await axios.delete(`${SERVER}/books/${id}`);
+      let trimmedCollection = this.state.books.filter(book => book._id !== id);
+      this.setState ({
+        books: trimmedCollection,
+      })
+    } catch(error){
+      console.log(error.response)
+    }
+  }
+  bookUpdate = async (book) => {
+    try {
+      let updateBookModal = await axios.post(`${SERVER}/books`, book);
+      this.setState({
+        books: [...this.state.books,updateBookModal.data]
+      })
+    } catch (error) {
+      console.log('we were unable to update your book', error.response)
+    }
+  }
+
   componentDidMount() {
     this.getBooks();
-  }
+  };
+
+  // when the site loads (has all it needs), the data will be displayed
+
+
   render() {
     /* TODO: render user's books in a Carousel */
 
     let bookCarousel = this.state.books.map(book => (
       <Carousel.Item key={book._id}>
+        <p>{book._id}</p>
         <h3>{book.title}</h3>
-        <img alt="img" src="https://via.placeholder.com/150"/>
         <p>{book.description}</p>
+       
+          <Button
+          onClick={()=>this.modalDeleteBooks(book._id)}
+          >
+            Remove {book.title} from Your Collection
+          </Button>
+          <Button
+          onClick={()=>this.updateBookModal}
+          >
+            Update {book.title}'s Info
+          </Button>
       </Carousel.Item>
     ))
 
@@ -48,14 +123,68 @@ class BestBooks extends React.Component {
           <Carousel>
             {bookCarousel}
           </Carousel>
+           <Button
+          onClick={this.modalFormShow}
+          >
+            Add A Book to Your Collection
+          </Button>
         </div>
       ) : (
-        <h1>No Books Found</h1>
+        <>
+          <h1>No Books Found</h1>
+          <Button
+          onClick={this.modalFormShow}
+          >
+            Add Book To Your Collection
+          </Button>
+          {/* <Button
+          onClick={this.modalDeleteBooks}
+          >
+            Remove A Book From Your Collection
+          </Button> */}
+          
+        </>
       )}
-      </>
-    );
 
+      <Modal
+      show={this.state.modalAddBooks}
+      onHide={this.onHide}
+      >
+        <Modal.Header>
+          <Modal.Title>Enter Book Details</Modal.Title>
+        </Modal.Header>
+
+        <BookFormModal
+        postBooks={this.postBooks}
+        onHide={this.onHide}
+        />
+      </Modal>
+      <Modal
+      show={this.state.modalDeleteBooks}
+      onHide={this.onHide}
+      >
+        {/* <Modal.Header>
+          <Modal.Title>Remove A Book From Your Collection</Modal.Title>
+        </Modal.Header> */}
+        <div>
+        <BookDeleteModal
+        deleteBooks={this.deleteBooks}
+        onHide={this.onHide}
+        />
+        </div>
+        <div>
+        <BookUpdateModal 
+        updateBook={this.updateBook}
+        onHide={this.onHide}
+        />
+        </div>
+      </Modal>
+      </>
+      );
+
+    };
   };
-};
+
+
 
 export default BestBooks;
