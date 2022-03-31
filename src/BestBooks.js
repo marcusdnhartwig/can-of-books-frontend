@@ -64,7 +64,7 @@ class BestBooks extends React.Component {
   }
 
   modalDeleteBooks = async (id) => {
-    console.log(id);
+    console.log(id, 'REMOVED FROM COLLECTION');
     try {
       await axios.delete(`${SERVER}/books/${id}`);
       let trimmedCollection = this.state.books.filter(book => book._id !== id);
@@ -107,11 +107,11 @@ class BestBooks extends React.Component {
           >
             Remove {book.title} from Your Collection
           </Button>
-          <Modal
+          <Button
           onClick={()=>this.updateBookModal}
           >
             Update {book.title}'s Info
-          </Modal>
+          </Button>
       </Carousel.Item>
     ))
 
@@ -141,14 +141,14 @@ class BestBooks extends React.Component {
           onClick={this.modalDeleteBooks}
           >
             Remove A Book From Your Collection
-          </Button>
-           */}
+          </Button> */}
+          
         </>
       )}
 
       <Modal
       show={this.state.modalAddBooks}
-      onHide={this.state.onHide}
+      onHide={this.onHide}
       >
         <Modal.Header>
           <Modal.Title>Enter Book Details</Modal.Title>
@@ -161,7 +161,7 @@ class BestBooks extends React.Component {
       </Modal>
       <Modal
       show={this.state.modalDeleteBooks}
-      onHide={this.state.onHide}
+      onHide={this.onHide}
       >
         {/* <Modal.Header>
           <Modal.Title>Remove A Book From Your Collection</Modal.Title>
