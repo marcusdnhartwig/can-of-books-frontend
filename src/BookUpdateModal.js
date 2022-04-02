@@ -14,10 +14,10 @@ class BookUpdateModal extends React.Component {
       description: event.target.description.value || this.props.book.description,
       status: event.target.status.checked || this.props.status.checked,
       email: event.target.email.value || this.props.email.value,
-      // id: this.props.book.id
+      _id: this.props.book._id
     } 
     //console.log(updatedBook);
-    this.props.bookUpdate(updatedBook);
+    this.props.bookUpdate(updatedBook, this.props.book._id);
     this.props.onHide();
 
   }
