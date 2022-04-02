@@ -18,7 +18,8 @@ class BestBooks extends React.Component {
       books: [],
       modalAddBooks: false,
       modalDeleteBooks: false,
-      modalUpdateBooks: false
+      modalUpdateBooks: false,
+      bookToUpdate: null
     }
   }
 
@@ -34,7 +35,8 @@ class BestBooks extends React.Component {
     })
   }
 
-  updateFormModalShow = () => {
+  updateFormModalShow = (book) => {
+    this.setBook(book)
     this.setState({
       modalUpdateBooks: true
     })
@@ -51,12 +53,13 @@ class BestBooks extends React.Component {
   getBooks = async () => {
     try {
       let results = await axios.get(`${SERVER}/books?email=${this.props.email}`);
+      console.log(results);
       this.setState({
         books: results.data
       })
       // console.log(this.state.books);
     } catch (error) {
-      console.log('we have an error:', error.response)
+      console.log('we have an error:', error.message)
     }
   }
 
@@ -85,18 +88,31 @@ class BestBooks extends React.Component {
   }
 
   bookUpdate = async (updatedBook, id) => {
-    // let bookID = books._id
+    // let bookID = books._id 
+    console.log(updatedBook);
     try {
-      let url = `${SERVER}/books/${updatedBook.id}`
-      let backendBook= await axios.post(url, updatedBook);
-      let backendBookData = this.state.books.map(exitingBook => {
-        return exitingBook._id === updatedBook._id ? backendBook.data : exitingBook;
-      });
-      this.setState({ books: backendBookData });
+      let bookBackend = await axios.put(`${SERVER}/books/${id}`, updatedBook);
+      console.log(bookBackend);
+      // this.setState({
+      //   books: [...this.state.books]
+       
+      // })
     } catch (error) {
-      console.log('we were unable to update your book', error.response)
+      console.log('we have an error:', error.response)
     }
   }
+    
+  //   try {
+  //     let url = `${SERVER}/books/${updatedBook.id}`
+  //     let backendBook= await axios.post(url, updatedBook);
+  //     let backendBookData = this.state.books.map(exitingBook => {
+  //       return exitingBook._id === updatedBook._id ? backendBook.data : exitingBook;
+  //     });
+  //     this.setState({ books: backendBookData });
+  //   } catch (error) {
+  //     console.log('we were unable to update your book', error.response)
+  //   }
+  // }
 
   componentDidMount() {
     this.getBooks();
@@ -105,7 +121,7 @@ class BestBooks extends React.Component {
   // when the site loads (has all it needs), the data will be displayed
   setBook = (obj) => {
     this.setState({
-      book: obj
+      bookToUpdate: obj
     })
   };
   
@@ -116,7 +132,7 @@ class BestBooks extends React.Component {
       <Carousel.Item key={book._id}>
         <h3>Title: {book.title}</h3>
         <p>Description: {book.description}</p>
-        {this.setBook(book)},
+        {/* {this.setBook(book)}, */}
 
         <Button
           onClick={() => this.modalDeleteBooks(book._id)}
@@ -124,7 +140,7 @@ class BestBooks extends React.Component {
           Remove {book.title} from Your Collection
         </Button>
         <Button
-          onClick={this.updateFormModalShow}
+          onClick={()=>this.updateFormModalShow(book)} 
           book= {book}
         >
           
@@ -198,14 +214,15 @@ class BestBooks extends React.Component {
             onHide={this.onHide}
           >
             <Modal.Header>
-              <Modal.Title>Remove A Book From Your Collection</Modal.Title>
+              <Modal.Title>Update A Book in Your Collection</Modal.Title>
             </Modal.Header>
 
             <div>
               <BookUpdateModal
+
                 bookUpdate={this.bookUpdate}
                 onHide={this.onHide}
-                // book={book}
+                book={this.state.bookToUpdate}
               />
             </div>
           </Modal>
