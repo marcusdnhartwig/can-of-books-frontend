@@ -3,6 +3,7 @@ import { Navbar, NavItem } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import './Header.css';
 import LogoutButton from './LogoutButton';
+import { withAuth0 } from '@auth0/auth0-react';
 
 class Header extends React.Component {
 
@@ -11,7 +12,8 @@ class Header extends React.Component {
     return (
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Navbar.Brand>My Favorite Books</Navbar.Brand>
-        {this.props.user && (
+        {this.props.auth0.isAuthenticated
+          ? (
           <>
         <NavItem><Link to="/" className="nav-link">Home</Link></NavItem>
         {/* TODO: if the user is logged in, render a navigation link to profile page */}
@@ -22,11 +24,12 @@ class Header extends React.Component {
      
           <LogoutButton onLogout={this.props.onLogout}/>
           </>
-          )}
+          )
+          : ''}
         
       </Navbar>
     )
   }
 }
 
-export default Header;
+export default withAuth0(Header);

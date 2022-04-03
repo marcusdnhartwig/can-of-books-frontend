@@ -1,49 +1,12 @@
-import { Component } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
-import LoginForm from './LoginForm';
-import Modal from 'react-bootstrap/Modal';
+import { useAuth0 } from "@auth0/auth0-react";
 
 
-export default class LoginButton extends Component {
-  constructor(props) {
-    super(props)
-    this.state={
-      showModal:false,
-    };
-  };
+const LoginButton = () => {
+  const { loginWithRedirect } = useAuth0();
 
-  modalHandler=() => {
-    this.setState({
-      showModal: !this.state.showModal,
-    });
-  };
-
-
-  render() {
-
-    /* TODO: Render a button with label 'Log In'. When the button is clicked then show LoginForm instead */
-    return (
-
-      <>
-        <Button
-        onClick={this.modalHandler}
-        >
-          User Login/Signup
-        </Button>
-
-        <Modal
-        show={this.state.showModal}
-        onHide={this.modalHandler}
-        >
-          <Modal.Header /*closebutton={this.modalHandler}*/>
-            <Modal.Title>Sign Up / Log in</Modal.Title>
-          </Modal.Header>
-          <LoginForm
-          userHandler={this.props.userHandler}
-          emailHandler={this.props.emailHandler}
-          />
-        </Modal>
-      </>
-    );
-  };
+  return <Button onClick={() => loginWithRedirect()}>Log In</Button>;
 };
+
+export default LoginButton;

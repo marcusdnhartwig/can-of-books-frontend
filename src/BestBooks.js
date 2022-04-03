@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import BookFormModal from './BookFormModal';
 //import BookDeleteModal from './BookDeleteModal';
 import BookUpdateModal from './BookUpdateModal';
+import { withAuth0 } from "@auth0/auth0-react";
 import "./BestBooks.css";
 
 
@@ -51,6 +52,9 @@ class BestBooks extends React.Component {
   }
 
   getBooks = async () => {
+    const res = await this.props.auth0.getIdTokenClaims();
+    const jwt =res.__raw;
+    console.log(jwt);
     try {
       let results = await axios.get(`${SERVER}/books?email=${this.props.email}`);
       console.log(results);
@@ -235,4 +239,4 @@ class BestBooks extends React.Component {
 
 
 
-export default BestBooks;
+export default withAuth0(BestBooks);
